@@ -1,0 +1,37 @@
+﻿@model UsuarioModel
+
+@{
+	Layout = "~/Views/Shared/_LayoutExterno.cshtml";
+}
+
+    <div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="main-panel">
+            <div class="content-wrapper d-flex align-items-center auth px-0">
+                <div class="row w-100 mx-0">
+                    <div class="col-lg-4 mx-auto">
+                        <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+                            <div class="brand-logo">
+                                <img src="~/img/Logo-Titulo.jpg" alt="logo">
+                            </div>
+                            <h3>¿Olvidaste tu contraseña?</h3>
+                            <h4 class="font-weight-light">Ingresa tu correo para restablecerla</h4>
+                            <form class="pt-3">
+                                <div class="form-group">
+                                    <input type="email" class="form-control form-control-lg" asp-for="Correo" placeholder="Correo" required>
+                                </div>
+                                
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">ENVIAR ENLACE</button>
+                                </div>
+                                <div class="text-center mt-4 font-weight-light">
+                                    ¿Ya recuerdas tu contraseña? <a href="@Url.Action("IniciarSesion", "Login")" class="text-primary">Iniciar Sesión</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
