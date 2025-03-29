@@ -1,15 +1,14 @@
-var builder = WebApplication.CreateBuilder(args);
+ï»¿var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient();
 
-// Habilitar sesiones
-builder.Services.AddDistributedMemoryCache(); // Necesario para usar sesión
-builder.Services.AddSession(); // Agregar servicio de sesión
+builder.Services.AddHttpClient();
+builder.Services.AddHttpClient<SodaAntojeriaTica.Services.CategoriaService>();
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
 
 var app = builder.Build();
-
 
 app.UseSession();
 
