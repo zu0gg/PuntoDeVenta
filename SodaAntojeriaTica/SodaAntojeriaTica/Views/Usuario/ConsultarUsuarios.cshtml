@@ -1,0 +1,69 @@
+﻿@model List<UsuarioModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista de Usuarios</h2>
+
+<!-- Botón para agregar un nuevo usuario -->
+<div class="mb-3">
+    <a href="@Url.Action("RegistrarCuenta", "Usuarios")" class="btn btn-success">
+        Agregar Nuevo Usuario
+    </a>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Fecha de Creación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var usuario in Model)
+            {
+                <tr>
+                    <td>@usuario.Id</td>
+                    <td>@usuario.Username</td>
+                    <td>@usuario.Email</td>
+                    <td>@(usuario.Rol != null ? usuario.Rol.Name : "Sin rol")</td>
+                    <td>@usuario.DayCreate?.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        <a href="@Url.Action("ActualizarDatos", "Usuarios", new { id = usuario.Id })" class="btn btn-primary btn-sm">
+                            Actualizar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay usuarios registrados.</p>
+}
+
+<script src="~/js/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function() {
+      $('#example').DataTable({
+          "language": {
+              "url": "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+          },
+          columnDefs: [
+              { className: 'dt-left', targets: '_all' },
+          ],
+      });
+    });
+
+</script>
+
+
