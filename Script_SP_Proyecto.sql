@@ -230,58 +230,51 @@ BEGIN
 END;
 GO
 
--------------------------------------------------------------------------------
---  C.1 InsertarCategoria
--------------------------------------------------------------------------------
+-----------------------------------------------------------
+-- Procedimiento: InsertarCategoria
+-----------------------------------------------------------
 CREATE PROCEDURE InsertarCategoria
     @Nombre NVARCHAR(50),
-    @Descripcion NVARCHAR(255)
+    @Descripcion NVARCHAR(255),
+    @NuevoId INT OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
-
+ 
     INSERT INTO Categorias (Nombre, Descripcion, CreatedAt)
     VALUES (@Nombre, @Descripcion, GETDATE());
+ 
+    SET @NuevoId = SCOPE_IDENTITY();
 END;
 GO
-
--------------------------------------------------------------------------------
---  C.2 ListarCategorias
--------------------------------------------------------------------------------
+ 
+-----------------------------------------------------------
+-- Procedimiento: ListarCategorias
+-----------------------------------------------------------
 CREATE PROCEDURE ListarCategorias
 AS
 BEGIN
     SET NOCOUNT ON;
-
-    SELECT Id,
-           Nombre,
-           Descripcion,
-           CreatedAt
-    FROM Categorias;
+    SELECT Id, Nombre, Descripcion, CreatedAt FROM Categorias;
 END;
 GO
-
--------------------------------------------------------------------------------
---  C.3 ObtenerCategoriaPorId
--------------------------------------------------------------------------------
+ 
+-----------------------------------------------------------
+-- Procedimiento: ObtenerCategoriaPorId
+-----------------------------------------------------------
 CREATE PROCEDURE ObtenerCategoriaPorId
     @Id INT
 AS
 BEGIN
     SET NOCOUNT ON;
-
-    SELECT Id,
-           Nombre,
-           Descripcion,
-           CreatedAt
-    FROM Categorias
+    SELECT Id, Nombre, Descripcion, CreatedAt FROM Categorias
     WHERE Id = @Id;
 END;
 GO
-
--------------------------------------------------------------------------------
---  C.4 ActualizarCategoria
--------------------------------------------------------------------------------
+ 
+-----------------------------------------------------------
+-- Procedimiento: ActualizarCategoria
+-----------------------------------------------------------
 CREATE PROCEDURE ActualizarCategoria
     @Id INT,
     @Nombre NVARCHAR(50),
@@ -289,28 +282,24 @@ CREATE PROCEDURE ActualizarCategoria
 AS
 BEGIN
     SET NOCOUNT ON;
-
     UPDATE Categorias
        SET Nombre = @Nombre,
            Descripcion = @Descripcion
      WHERE Id = @Id;
 END;
 GO
-
--------------------------------------------------------------------------------
---  C.5 EliminarCategoria
--------------------------------------------------------------------------------
+ 
+-----------------------------------------------------------
+-- Procedimiento: EliminarCategoria
+-----------------------------------------------------------
 CREATE PROCEDURE EliminarCategoria
     @Id INT
 AS
 BEGIN
     SET NOCOUNT ON;
-
-    DELETE FROM Categorias
-    WHERE Id = @Id;
+    DELETE FROM Categorias WHERE Id = @Id;
 END;
 GO
-
 -------------------------------------------------------------------------------
 --  D.1 InsertarProducto
 -------------------------------------------------------------------------------

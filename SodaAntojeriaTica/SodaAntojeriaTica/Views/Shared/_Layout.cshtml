@@ -1,21 +1,101 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SODA ANTOJERIA TICA</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+    <title>Soda Antojeria Tica - Costa Rica</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+          rel="stylesheet" />
+    
 </head>
 <body>
     <header>
+        <div class="navbar">
+            <div class="navbar-left">
+                <div class="menu-hamburger">
+                    <span>&#9776;</span>
+                    <div class="dropdown-menu">
+                        <ul>
+                            <li><a href="#">test 1</a></li>
+                            <li><a href="#">test 2</a></li>
+                            <li><a href="#">test 3</a></li>
+                            <li><a href="#">test 1</a></li>
+                            <li><a href="#">test 2</a></li>
+                            <li><a href="#">test 3</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="logo">
+                    <img src="\img\Logo-Titulo.jpg" alt="Logo Soda La Delicia" />
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Menú</a></li>
+                <li><a href="#">Promociones</a></li>
+                <li><a href="#">Reservas</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+            <button class="cta-btn">Ordena Ahora</button>
+        </div>
+        <section class="hero">
+            <h1>Cómo quieres hoy tu pedido</h1>
+            <div class="hero-buttons">
+                <button>Recoger</button>
+                <button>Express</button>
+                <button>A tu mesa</button>
+
+            </div>
+        </section>
+        <nav class="secondary-nav">
+            <ul>
+                <li>
+                    <a href="#">
+                        <img src="\img\desayuno1.jpg" alt="Desayunos" class="category-icon" />
+                        Desayunos
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="\img\almuerzo1.jpg" alt="Almuerzos" class="category-icon" />
+                        Almuerzos
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="\img\cena1.jpg" alt="Cenas" class="category-icon" />
+                        Cenas
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="\img\combo1.jpg" alt="Combos" class="category-icon" />
+                        Combos
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="\img\bebida1.jpg" alt="Bebidas" class="category-icon" />
+                        Bebidas
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="\img\postre1.jpg" alt="Postres" class="category-icon" />
+                        Postres
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </header>
-    <div class="container">
+
+    <main>
         @RenderBody()
-    </div>
-    <footer>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
-    @RenderSection("Scripts", required: false)
+    </main>
 </body>
 </html>
+
+
