@@ -1,4 +1,4 @@
-﻿namespace SodaAntojeriaTicaApi.Models
+﻿namespace SodaAntojeriaTica.Models
 {
     public class RolModel
     {

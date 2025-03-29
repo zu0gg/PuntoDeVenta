@@ -2,9 +2,12 @@
 {
     public class UsuarioModel
     {
-        public string? Identificacion { get; set; }
-        public string? Contrasenna { get; set; }
-        public string? Nombre { get; set; }
-        public string? Correo { get; set; }
+        public int? Id { get; set; }
+        public string? Username { get; set; }
+        public string Email { get; set; }
+        public string PasswordHash { get; set; }
+        public int? RoleId { get; set; }
+        public RolModel? Rol { get; set; }
+        public DateTime? DayCreate { get; set; } = DateTime.Now;
     }
 }

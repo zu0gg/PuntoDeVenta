@@ -21,13 +21,11 @@ namespace SodaAntojeriaTicaApi.Controllers
         [Route("RegistrarCuenta")]
         public IActionResult RegistrarCuenta(UsuarioModel model)
         {
-            var passwordHasher = new PasswordHasher<UsuarioModel>();
-            var hashedPassword = passwordHasher.HashPassword(model, model.PasswordHash);
 
             using (var connection = new SqlConnection(_configuration.GetSection("ConnectionStrings:BDConnection").Value))
             {
                 var result = connection.Execute("RegistrarCuenta",
-                    new { model.Username, model.Email, PasswordHash = hashedPassword });
+                    new { model.Username, model.Email, model.PasswordHash});
 
                 var respuesta = new RespuestaModel();
 
