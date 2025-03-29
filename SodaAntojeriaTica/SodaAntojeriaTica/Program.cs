@@ -4,7 +4,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 
+// Habilitar sesiones
+builder.Services.AddDistributedMemoryCache(); // Necesario para usar sesión
+builder.Services.AddSession(); // Agregar servicio de sesión
+
 var app = builder.Build();
+
+// Habilitar middleware de sesión
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

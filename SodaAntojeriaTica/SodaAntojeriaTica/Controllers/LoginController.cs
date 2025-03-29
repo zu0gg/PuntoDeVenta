@@ -76,12 +76,17 @@ namespace SodaAntojeriaTica.Controllers
                     {
                         var datosResult = JsonSerializer.Deserialize<UsuarioModel>((JsonElement)result.Datos!);
 
-                        HttpContext.Session.SetString("Username", datosResult!.Username!);
-                        if (datosResult.Rol != null)
+                        // Verifica que HttpContext.Session no sea nulo antes de usarlo
+                        if (HttpContext.Session != null)
                         {
-                            HttpContext.Session.SetString("NombrePerfil", datosResult.Rol.Name!);
+                            HttpContext.Session.SetString("Username", datosResult!.Username!);
+                            if (datosResult.Rol != null)
+                            {
+                                HttpContext.Session.SetString("NombrePerfil", datosResult.Rol.Name!);
+                            }
+                            HttpContext.Session.SetString("RoleId", datosResult.RoleId.ToString());
                         }
-                        HttpContext.Session.SetString("RoleId", datosResult.RoleId.ToString());
+
                         return RedirectToAction("Principal", "Login");
                     }
                     else
