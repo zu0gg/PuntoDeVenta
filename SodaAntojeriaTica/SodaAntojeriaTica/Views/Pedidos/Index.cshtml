@@ -1,0 +1,36 @@
+﻿@model List<SodaAntojeriaTicaApi.Models.PedidoModel>
+
+<h2>Lista de Pedidos</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Tipo de Pedido</th>
+            <th>Mesa</th>
+            <th>Dirección de Entrega</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pedido in Model)
+        {
+            <tr>
+                <td>@pedido.Id</td>
+                <td>@pedido.UserId</td>
+                <td>@pedido.OrderType</td>
+                <td>@pedido.Mesa</td>
+                <td>@pedido.DireccionEntrega</td>
+                <td>@pedido.Total</td>
+                <td>@pedido.Estado</td>
+                <td>
+                    <a href="@Url.Action("Editar", new { id = pedido.Id })" class="btn btn-primary">Editar</a>
+                    <a href="@Url.Action("Eliminar", new { id = pedido.Id })" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a href="@Url.Action("Crear")" class="btn btn-success">Nuevo Pedido</a>

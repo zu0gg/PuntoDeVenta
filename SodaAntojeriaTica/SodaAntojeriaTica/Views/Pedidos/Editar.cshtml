@@ -1,0 +1,28 @@
+﻿@model SodaAntojeriaTicaApi.Models.PedidoModel
+
+<h2>Editar Pedido</h2>
+
+<form method="post">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <div class="form-group">
+        <label for="UserId">ID de Usuario</label>
+        <input type="number" class="form-control" id="UserId" name="UserId" value="@Model.UserId" required />
+    </div>
+    <div class="form-group">
+        <label for="OrderType">Tipo de Pedido</label>
+        <input type="text" class="form-control" id="OrderType" name="OrderType" value="@Model.OrderType" required />
+    </div>
+    <div class="form-group">
+        <label for="Mesa">Mesa</label>
+        <input type="text" class="form-control" id="Mesa" name="Mesa" value="@Model.Mesa" required />
+    </div>
+    <div class="form-group">
+        <label for="DireccionEntrega">Dirección de Entrega</label>
+        <input type="text" class="form-control" id="DireccionEntrega" name="DireccionEntrega" value="@Model.DireccionEntrega" required />
+    </div>
+    <div class="form-group">
+        <label for="Total">Total</label>
+        <input type="number" class="form-control" id="Total" name="Total" value="@Model.Total" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Actualizar Pedido</button>
+</form>
