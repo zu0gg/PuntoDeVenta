@@ -1,9 +1,14 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using SodaAntojeriaTica.Dependencias;
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<SodaAntojeriaTica.Services.CategoriaService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUtilitarios, Utilitarios>();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();

@@ -1,6 +1,14 @@
-﻿namespace SodaAntojeriaTica.Dependencias
+﻿using Microsoft.Extensions.Configuration;
+using SodaAntojeriaTica.Models;
+using System.Net.Http.Headers;
+using System.Net.Http;
+using System.Text.Json;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace SodaAntojeriaTica.Dependencias
 {
-    public class Utilitarios
+    public class Utilitarios : IUtilitarios
     {
         private readonly IHttpClientFactory _httpClient;
         private readonly IConfiguration _configuration;
@@ -12,11 +20,15 @@
             _accessor = accessor;
         }
 
-        public HttpResponseMessage ConsultarInfoUsuarios(int id)
+        public HttpResponseMessage ConsultarUsuario(long Id)
         {
-            var url = _configuration["UrlApi"] + "api/Usuarios/ListarUsuarios";
-            var client = _httpClient.CreateClient();
-            return client.GetAsync(url).Result;
+            using (var api = _httpClient.CreateClient())
+            {
+                var url = _configuration.GetSection("Variables:urlApi").Value + "Usuarios/ListarUsuarios?Id=" + Id;
+                var response = api.GetAsync(url).Result;
+
+                return response;
+            }
         }
     }
 }

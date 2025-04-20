@@ -17,7 +17,7 @@ INSERT INTO Roles (Name) VALUES ('Cliente'), ('Administrador'), ('Empleado');
 GO
 
 SELECT * FROM Users;
-SELECT * FROM Roles;
+SELECT * FROM Categorias;
 
 -- =====================================================
 -- 3. Tabla de Usuarios

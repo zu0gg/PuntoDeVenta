@@ -135,6 +135,9 @@ BEGIN
 END;
 GO
 
+SELECT * FROM Users;
+SELECT * FROM Roles;
+SELECT * FROM Categorias;
 -------------------------------------------------------------------------------
 --  B.1 InsertarUsuario
 -------------------------------------------------------------------------------
@@ -145,10 +148,21 @@ CREATE PROCEDURE InsertarUsuario
     @RoleId INT
 AS
 BEGIN
-    SET NOCOUNT ON;
+    IF EXISTS (SELECT 1 FROM Users WHERE Email = @Email)
+    BEGIN
+        PRINT 'Ya existe un usuario con el mismo correo electrónico.';
+        RETURN;
+    END
 
-    INSERT INTO Users (Username, Email, PasswordHash, RoleId, DayCreate)
-    VALUES (@Username, @Email, @PasswordHash, @RoleId, GETDATE());
+    BEGIN TRY
+        INSERT INTO Users (Username, Email, PasswordHash, RoleId)
+        VALUES (@Username, @Email, @PasswordHash, @RoleId);
+
+        PRINT 'Usuario insertado correctamente.';
+    END TRY
+    BEGIN CATCH
+        PRINT 'Error al insertar usuario: ' + ERROR_MESSAGE();
+    END CATCH
 END;
 GO
 
@@ -169,6 +183,21 @@ BEGIN
            U.DayCreate
     FROM Users U
     INNER JOIN Roles R ON U.RoleId = R.Id;
+END;
+GO
+
+
+-------------------------------------------------------------------------------
+--  B.4 ObtenerUsuarioPorNombre
+-------------------------------------------------------------------------------
+CREATE PROCEDURE ObtenerUsuarioPorNombre
+    @Username NVARCHAR(50)
+AS
+BEGIN
+    SELECT U.*, R.Name AS RoleName
+    FROM Users U
+    INNER JOIN Roles R ON U.RoleId = R.Id
+    WHERE U.Username = @Username;
 END;
 GO
 
@@ -199,20 +228,27 @@ GO
 -------------------------------------------------------------------------------
 CREATE PROCEDURE ActualizarUsuario
     @Id INT,
-    @Username NVARCHAR(50),
-    @Email NVARCHAR(100),
-    @PasswordHash NVARCHAR(256),
-    @RoleId INT
+    @Username NVARCHAR(50) = NULL,
+    @Email NVARCHAR(100) = NULL,
+    @PasswordHash NVARCHAR(256) = NULL,
+    @RoleId INT = NULL
 AS
 BEGIN
-    SET NOCOUNT ON;
+    IF NOT EXISTS (SELECT 1 FROM Users WHERE Id = @Id)
+    BEGIN
+        PRINT 'El usuario con el ID especificado no existe.';
+        RETURN;
+    END
 
     UPDATE Users
-       SET Username = @Username,
-           Email = @Email,
-           PasswordHash = @PasswordHash,
-           RoleId = @RoleId
-     WHERE Id = @Id;
+    SET
+        Username = ISNULL(@Username, Username),
+        Email = ISNULL(@Email, Email),
+        PasswordHash = ISNULL(@PasswordHash, PasswordHash),
+        RoleId = ISNULL(@RoleId, RoleId)
+    WHERE Id = @Id;
+
+    PRINT 'Usuario actualizado correctamente.';
 END;
 GO
 
@@ -225,11 +261,15 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Users
-    WHERE Id = @Id;
+    IF NOT EXISTS (SELECT 1 FROM Users WHERE Id = @Id)
+    BEGIN
+        RAISERROR('El usuario no existe', 16, 1);
+        RETURN;
+    END
+
+    DELETE FROM Users WHERE Id = @Id;
 END;
 GO
-
 -----------------------------------------------------------
 -- Procedimiento: InsertarCategoria
 -----------------------------------------------------------
@@ -246,8 +286,6 @@ BEGIN
  
     SET @NuevoId = SCOPE_IDENTITY();
 END;
-GO
- 
 -----------------------------------------------------------
 -- Procedimiento: ListarCategorias
 -----------------------------------------------------------
@@ -257,8 +295,6 @@ BEGIN
     SET NOCOUNT ON;
     SELECT Id, Nombre, Descripcion, CreatedAt FROM Categorias;
 END;
-GO
- 
 -----------------------------------------------------------
 -- Procedimiento: ObtenerCategoriaPorId
 -----------------------------------------------------------
@@ -270,25 +306,25 @@ BEGIN
     SELECT Id, Nombre, Descripcion, CreatedAt FROM Categorias
     WHERE Id = @Id;
 END;
-GO
- 
 -----------------------------------------------------------
 -- Procedimiento: ActualizarCategoria
 -----------------------------------------------------------
 CREATE PROCEDURE ActualizarCategoria
     @Id INT,
-    @Nombre NVARCHAR(50),
-    @Descripcion NVARCHAR(255)
+    @Nombre NVARCHAR(50) = NULL,
+    @Descripcion NVARCHAR(255) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
+    
     UPDATE Categorias
        SET Nombre = @Nombre,
            Descripcion = @Descripcion
      WHERE Id = @Id;
-END;
+
+	 PRINT 'Categoria actualizada correctamente.';
+END
 GO
- 
 -----------------------------------------------------------
 -- Procedimiento: EliminarCategoria
 -----------------------------------------------------------
@@ -299,7 +335,6 @@ BEGIN
     SET NOCOUNT ON;
     DELETE FROM Categorias WHERE Id = @Id;
 END;
-GO
 -------------------------------------------------------------------------------
 --  D.1 InsertarProducto
 -------------------------------------------------------------------------------

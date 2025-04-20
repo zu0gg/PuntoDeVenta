@@ -16,35 +16,60 @@ namespace SodaAntojeriaTicaApi.Controllers
             _configuration = configuration;
         }
 
+        #region InsertarUusario
         [HttpPost]
         [Route("InsertarUsuario")]
         public IActionResult InsertarUsuario(UsuarioModel model)
         {
             var respuesta = new RespuestaModel();
+
             try
             {
-                using var conn = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
-                conn.Execute("InsertarUsuario",
-                    new
-                    {
-                        model.Username,
-                        model.Email,
-                        model.PasswordHash,
-                        model.RoleId
-                    },
-                    commandType: CommandType.StoredProcedure);
+                using (var context = new SqlConnection(_configuration.GetSection("ConnectionStrings:BDConnection").Value))
+                {
+                    var usuarios = context.Query<UsuarioModel>("ListarUsuarios", commandType: CommandType.StoredProcedure).ToList();
 
-                respuesta.Indicador = true;
-                respuesta.Mensaje = "Usuario insertado correctamente";
+                    if (usuarios.Any(u => u.Email == model.Email))
+                    {
+                        respuesta.Indicador = false;
+                        respuesta.Mensaje = "El correo ya está registrado.";
+                        return Ok(respuesta);
+                    }
+
+                    var result = context.Execute("InsertarUsuario",
+                        new
+                        {
+                            model.Username,
+                            model.Email,
+                            model.PasswordHash,
+                            model.RoleId
+                        },
+                        commandType: CommandType.StoredProcedure);
+
+                    if (result > 0)
+                    {
+                        respuesta.Indicador = true;
+                        respuesta.Mensaje = "Usuario agregado exitosamente.";
+                    }
+                    else
+                    {
+                        respuesta.Indicador = false;
+                        respuesta.Mensaje = "Error al insertar el usuario.";
+                    }
+                }
             }
             catch (Exception ex)
             {
                 respuesta.Indicador = false;
                 respuesta.Mensaje = ex.Message;
             }
+
             return Ok(respuesta);
         }
 
+        #endregion
+
+        #region ListarUsuarios
         [HttpGet]
         [Route("ListarUsuarios")]
         public IActionResult ListarUsuarios()
@@ -67,7 +92,9 @@ namespace SodaAntojeriaTicaApi.Controllers
             }
             return Ok(respuesta);
         }
+        #endregion
 
+        #region ObtenerUsuarios
         [HttpGet]
         [Route("ObtenerUsuarioPorId/{id}")]
         public IActionResult ObtenerUsuarioPorId(int id)
@@ -100,6 +127,44 @@ namespace SodaAntojeriaTicaApi.Controllers
             return Ok(respuesta);
         }
 
+        [HttpGet]
+        [Route("ObtenerUsuarioPorNombre/{username}")]
+        public IActionResult ObtenerUsuarioPorNombre(string username)
+        {
+            var respuesta = new RespuestaModel();
+            try
+            {
+                using var conn = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+
+                var usuarios = conn.Query<UsuarioModel>(
+                    "ObtenerUsuarioPorNombre",
+                    new { Username = username },
+                    commandType: CommandType.StoredProcedure
+                ).ToList();
+
+                if (usuarios.Any())
+                {
+                    respuesta.Indicador = true;
+                    respuesta.Mensaje = "Usuarios encontrados.";
+                    respuesta.Datos = usuarios;
+                }
+                else
+                {
+                    respuesta.Indicador = false;
+                    respuesta.Mensaje = "No se encontraron usuarios con ese nombre.";
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.Indicador = false;
+                respuesta.Mensaje = "Error inesperado: " + ex.Message;
+            }
+
+            return Ok(respuesta);
+        }
+        #endregion
+
+        #region ActualizarUsuario
         [HttpPut]
         [Route("ActualizarUsuario/{id}")]
         public IActionResult ActualizarUsuario(int id, UsuarioModel model)
@@ -129,7 +194,9 @@ namespace SodaAntojeriaTicaApi.Controllers
             }
             return Ok(respuesta);
         }
+        #endregion
 
+        #region EliminarUsuario
         [HttpDelete]
         [Route("EliminarUsuario/{id}")]
         public IActionResult EliminarUsuario(int id)
@@ -152,5 +219,6 @@ namespace SodaAntojeriaTicaApi.Controllers
             }
             return Ok(respuesta);
         }
+        #endregion
     }
 }

@@ -4,6 +4,7 @@ namespace SodaAntojeriaTica.Dependencias
 {
     public interface IUtilitarios
     {
-        HttpResponseMessage ConsultarInfoUsuarios(long Id);
+        HttpResponseMessage ConsultarUsuario(long Id);
+
     }
 }

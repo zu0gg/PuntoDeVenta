@@ -1,10 +1,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using SodaAntojeriaTicaApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 
 builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.PropertyNamingPolicy = null);
 builder.Services.AddEndpointsApiExplorer();

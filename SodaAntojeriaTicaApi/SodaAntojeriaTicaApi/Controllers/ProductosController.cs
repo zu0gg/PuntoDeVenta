@@ -16,6 +16,7 @@ namespace SodaAntojeriaTicaApi.Controllers
             _configuration = configuration;
         }
 
+        #region InsertarProducto
         [HttpPost]
         [Route("InsertarProducto")]
         public IActionResult InsertarProducto(ProductoModel model)
@@ -44,7 +45,9 @@ namespace SodaAntojeriaTicaApi.Controllers
             }
             return Ok(respuesta);
         }
+        #endregion
 
+        #region ListarProductos
         [HttpGet]
         [Route("ListarProductos")]
         public IActionResult ListarProductos()
@@ -67,7 +70,9 @@ namespace SodaAntojeriaTicaApi.Controllers
             }
             return Ok(respuesta);
         }
+        #endregion
 
+        #region ObtenerProductoPorId
         [HttpGet]
         [Route("ObtenerProductoPorId/{id}")]
         public IActionResult ObtenerProductoPorId(int id)
@@ -99,38 +104,46 @@ namespace SodaAntojeriaTicaApi.Controllers
             }
             return Ok(respuesta);
         }
+        #endregion
 
+        #region ActualizarProducto
         [HttpPut]
-        [Route("ActualizarProducto/{id}")]
-        public IActionResult ActualizarProducto(int id, ProductoModel model)
+        [Route("ActualizarProducto")]
+        public IActionResult ActualizarProducto(ProductoModel model)
         {
             var respuesta = new RespuestaModel();
-            try
-            {
-                using var conn = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
-                conn.Execute("ActualizarProducto",
-                    new
-                    {
-                        Id = id,
-                        model.Nombre,
-                        model.Descripcion,
-                        model.Precio,
-                        model.CategoriaId,
-                        model.IsActive
-                    },
-                    commandType: CommandType.StoredProcedure);
 
+            using var conn = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+            var result = conn.Execute(
+                "ActualizarProducto",
+                new
+                {
+                    Id = model.Id,
+                    Nombre = model.Nombre,
+                    Descripcion = model.Descripcion,
+                    Precio = model.Precio,
+                    CategoriaId = model.CategoriaId,
+                    IsActive = model.IsActive
+                },
+                commandType: CommandType.StoredProcedure
+            );
+
+            if (result > 0)
+            {
                 respuesta.Indicador = true;
-                respuesta.Mensaje = "Producto actualizado correctamente";
+                respuesta.Mensaje = "Información actualizada";
             }
-            catch (Exception ex)
+            else
             {
                 respuesta.Indicador = false;
-                respuesta.Mensaje = ex.Message;
+                respuesta.Mensaje = "No se actualizó la información correctamente";
             }
+
             return Ok(respuesta);
         }
+        #endregion
 
+        #region EliminarProducto
         [HttpDelete]
         [Route("EliminarProducto/{id}")]
         public IActionResult EliminarProducto(int id)
@@ -153,5 +166,6 @@ namespace SodaAntojeriaTicaApi.Controllers
             }
             return Ok(respuesta);
         }
+        #endregion
     }
 }

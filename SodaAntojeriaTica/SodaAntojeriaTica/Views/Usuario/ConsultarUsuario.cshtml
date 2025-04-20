@@ -1,0 +1,69 @@
+﻿@model List<UsuarioModel>
+
+<div class="card card-default">
+    <div class="card-header">
+        <h2>Puestos</h2>
+
+        <div style="text-align:right;">
+            <a class="btn btn-outline-primary" href="@Url.Action("AgregarUsuario","Usuario")">
+                <i class="fa fa-plus"></i>   Agregar
+            </a>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        @if (@ViewBag.Msj != null)
+        {
+            <div class="alert alert-default text-center" role="alert">
+                @ViewBag.Msj
+            </div>
+        }
+
+        <table id="example" class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Password</th>
+                    <th>RolId</th>
+                    <th>Day Create</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Username</td>
+                        <td>@item.Email</td>
+                        <td>@item.PasswordHash</td>
+                        <td>@item.RoleId</td>
+                        <td>@item.DayCreate</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<script src="~/js/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function() {
+      $('#example').DataTable({
+          "language": {
+              "url": "https://cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+          },
+          columnDefs: [
+              { className: 'dt-left', targets: '_all' },
+          ],
+      });
+    });
+
+</script>
